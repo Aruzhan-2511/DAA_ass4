@@ -102,7 +102,7 @@ public class Marker {
             if(positions != null){
                 for(int pos : positions){
                     boolean same = true;
-                    for (int j = 0; i < k; j++){
+                    for (int j = 0; j < k; j++){
                         if(a.charAt(i+j) != b.charAt(pos+j)){
                             same = false;
                             break;
