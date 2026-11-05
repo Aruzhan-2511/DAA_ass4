@@ -67,7 +67,54 @@ public class Marker {
      * Example: a = "ACGTAC", b = "TTACGT", k = 4: the words of a are ACGT, CGTA, GTAC; only ACGT is in b, so the answer is 1.
      */
     public static int sharedWords(String a, String b, int k) {
-        // TODO Mission 4
-        return -1;
+        if (k <= 0 || a.length() < k || b.length() < k){
+            return 0;
+        }
+        final long BASE = 257;
+        final long MOD = 1_000_000_007L;
+        long power = 1;
+        for (int i = 1; i < k; i++){
+            power = (power * BASE) % MOD;
+        }
+        HashMap<Long, ArrayList<Integer>> hashes = new HashMap<>();
+        long hashB = 0;
+        for (int i = 0; i < k; i++){
+            hashB = (hashB * BASE + b.charAt(i)) % MOD;
+        }
+        for (int i = 0; i <= b.length() - k; i++){
+            if (i > 0){
+                hashB = (hashB - b.charAt(i-1) * power % MOD + MOD) % MOD;
+                hashB = (hashB * BASE + b.charAt(i+k-1)) % MOD;
+            }
+            hashes.computeIfAbsent(hashB, x -> new ArrayList<>()).add(i);
+        }
+        long hashA = 0;
+        for (int i = 0; i < k; i++){
+            hashA = (hashA * BASE +a.charAt(i)) % MOD;
+        }
+        int count = 0;
+        for (int i = 0; i <= a.length() -k; i++){
+            if (i > 0){
+                hashA = (hashA - a.charAt(i-1) * power % MOD + MOD) % MOD;
+                hashA = (hashA * BASE +a.charAt(i + k -1)) % MOD;
+            }
+            ArrayList<Integer> positions = hashes.get(hashA);
+            if(positions != null){
+                for(int pos : positions){
+                    boolean same = true;
+                    for (int j = 0; i < k; j++){
+                        if(a.charAt(i+j) != b.charAt(pos+j)){
+                            same = false;
+                            break;
+                        }
+                    }
+                    if (same){
+                        count++;
+                        break;
+                    }
+                }
+            }
+        }
+        return count;
     }
 }
