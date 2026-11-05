@@ -17,7 +17,7 @@ public class Outbreak {
      * Main calls this twice: with all costs equal to 1 (the line "Tests needed") and with the real costs ("Cheapest testing").
      */
     public static boolean[] cheapestTests(int n, int[][] nb, int[] cost) {
-        int[] parent = new int[];
+        int[] parent = new int[n];
         Arrays.fill(parent, -1);
         int[] order = new int[n];
         int count = 0;
