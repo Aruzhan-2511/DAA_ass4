@@ -45,7 +45,7 @@ public class Outbreak {
         }
         boolean[] tested = new boolean[n];
         tested[0] = take[0] <= skip[0];
-        for (int i = 2; i < n; i++){
+        for (int i = 1; i < n; i++){
             int v = order[i];
             int p = parent[v];
             tested[v] = !tested[p] || take[v] <= skip[v];
