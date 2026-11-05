@@ -17,8 +17,40 @@ public class Outbreak {
      * Main calls this twice: with all costs equal to 1 (the line "Tests needed") and with the real costs ("Cheapest testing").
      */
     public static boolean[] cheapestTests(int n, int[][] nb, int[] cost) {
-        // TODO Mission 5a
-        return new boolean[n];
+        int[] parent = new int[];
+        Arrays.fill(parent, -1);
+        int[] order = new int[n];
+        int count = 0;
+        order[count++] = 0;
+        parent[0] = 0;
+        for(int i = 0; i < count; i++){
+            int v = order[i];
+            for (int u : nb[v]){
+                if (u != parent[v]){
+                    parent[u] = v;
+                    order[count++] = u;
+                }
+            }
+        }
+        long[] take = new long[n];
+        long[] skip = new long[n];
+        for (int i = n -1; i >= 0; i--){
+            int v = order[i];
+            take[v] = cost[v];
+            for (int u : nb[v]){
+                if (u == parent[v]) continue;
+                take[v] += Math.min(take[u], skip[u]);
+                skip[v] += take[u];
+            }
+        }
+        boolean[] tested = new boolean[n];
+        tested[0] = take[0] <= skip[0];
+        for (int i = 2; i < n; i++){
+            int v = order[i];
+            int p = parent[v];
+            tested[v] = !tested[p] || take[v] <= skip[v];
+        }
+        return tested;
     }
 
     /**
@@ -27,7 +59,41 @@ public class Outbreak {
      * Example: a line 0-1-2-3 has chain 3; a star with centre 0 and leaves 1, 2, 3 has chain 2.
      */
     public static int longestChain(int n, int[][] nb) {
-        // TODO Mission 5b
-        return -1;
+        int[] parent = new int[n];
+        Arrays.fill(parent, -1);
+        int[] order = new int[n];
+        int count = 0;
+        order[count++] = 0;
+        parent[0] = 0;
+        for (int i = 0; i < count; i++){
+            int v = order[i];
+            for (int u : nb[v]){
+                if(u != parent[v]){
+                    parent[u] = v;
+                    order[count++] = u;
+                }
+            }
+        }
+        int[] down = new int[n];
+        int longest = 0;
+        for (int i = n -1; i >= 0; i--){
+            int v = order[i];
+            int first = 0;
+            int second = 0;
+            for (int u : nb[v]){
+                if (u == parent[v]) continue;
+                int length = down[u] + 1;
+                if (length > first){
+                    second = first;
+                    first = length;
+                } else if (length > second) {
+                    second = length;
+
+                }
+            }
+            down[v] = first;
+            longest = Math.max(longest, first + second);
+        }
+        return longest;
     }
 }
