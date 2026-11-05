@@ -58,6 +58,7 @@ Milliseconds, average of 3 runs, from `java -cp out Bench`.
 | edit distance | 500 / 1000 / 2000 / 4000 | 5.4 / 5.3 / 13.6 / 58.7 |
 
 What do the numbers say about how the time grows? When you double the size, by how much does each time grow? Two or three sentences.
+When the text size doubles, naive search takes about twice as long, while KMP remains fast. Edit distance becomes slower as the strings grow because it fills a two-dimensional DP table.
 
 ## Complexity
 
